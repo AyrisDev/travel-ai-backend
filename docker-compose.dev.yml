@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: travel-ai-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: travel_ai
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - travel-ai-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: travel-ai-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - travel-ai-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  travel-ai-network:
+    driver: bridge
