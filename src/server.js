@@ -16,6 +16,9 @@ validateEnvironment();
 
 const app = express();
 
+// Trust proxy for reverse proxy setups (Coolify, Nginx, etc.)
+app.set('trust proxy', true);
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
@@ -101,8 +104,9 @@ const startServer = async () => {
     alertingService.start();
     
     // Start server
-    const server = app.listen(config.port, () => {
+    const server = app.listen(config.port, '0.0.0.0', () => {
       logger.info(`Server running on port ${config.port} in ${config.nodeEnv} mode`);
+      logger.info(`Server accessible at http://0.0.0.0:${config.port}`);
     });
 
     // Graceful shutdown
