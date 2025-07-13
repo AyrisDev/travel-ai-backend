@@ -10,6 +10,13 @@ class CacheService {
   }
 
   async connect() {
+    // Skip Redis connection if URL not provided
+    if (!config.redis?.url) {
+      logger.info('Redis URL not provided, skipping Redis connection');
+      this.isConnected = false;
+      return;
+    }
+
     try {
       this.client = createClient({
         url: config.redis.url,
